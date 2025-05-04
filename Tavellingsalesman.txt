@@ -1,0 +1,64 @@
+import heapq
+
+def mst_heuristic(unvisited, graph):
+    if not unvisited:
+        return 0
+    visited = set()
+    start = next(iter(unvisited))
+    heap = [(0, start)]
+    total_cost = 0
+    while heap and len(visited) < len(unvisited):
+        cost, node = heapq.heappop(heap)
+        if node in visited:
+            continue
+        visited.add(node)
+        total_cost += cost
+        for neighbor in unvisited:
+            if neighbor != node and neighbor not in visited:
+                heapq.heappush(heap, (graph[node][neighbor], neighbor))
+    return total_cost
+
+def a_star_tsp(graph, start, n):
+    all_nodes = set(range(n))
+    heap = []
+    initial_state = (0, start, [start], set([start]))
+    heapq.heappush(heap, (0, initial_state))
+
+    while heap:
+        f, (g, current, path, visited) = heapq.heappop(heap)
+        if len(visited) == n:
+            total_cost = g + graph[current][start]
+            return path + [start], total_cost
+
+        unvisited = all_nodes - visited
+        h = mst_heuristic(unvisited, graph) + (min(graph[current][v] for v in unvisited) if unvisited else 0)
+
+        for neighbor in unvisited:
+            new_g = g + graph[current][neighbor]
+            new_path = path + [neighbor]
+            new_visited = visited | {neighbor}
+            heapq.heappush(heap, (new_g + h, (new_g, neighbor, new_path, new_visited)))
+
+    return None, float('inf')
+
+if __name__ == "__main__":
+    n = int(input("Enter number of cities: "))
+    graph = [[float('inf')] * n for _ in range(n)]
+
+    print("Enter edges in the format: city1 city2 distance (type 'done' to finish):")
+    while True:
+        entry = input()
+        if entry.lower() == 'done':
+            break
+        try:
+            u, v, w = map(int, entry.strip().split())
+            graph[u][v] = w
+            graph[v][u] = w  # Symmetric for TSP
+        except:
+            print("Invalid input. Please enter in format: city1 city2 distance")
+
+    start = int(input(f"Enter starting city (0 to {n-1}): "))
+    path, cost = a_star_tsp(graph, start, n)
+
+    print("\nOptimal Tour:", path)
+    print("Minimum Cost:", cost)s
