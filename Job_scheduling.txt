@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+
+def job_scheduling(jobs):
+    jobs.sort(key=lambda x: x[2], reverse=True)
+    print("Job scheduling based on highest profit first...")
+
+    n = len(jobs)
+    slots = [-1] * n
+    result = [None] * n
+
+    for i in range(n):
+        print(f"Considering job {jobs[i]} with profit {jobs[i][2]}.")
+        for j in range(min(n, jobs[i][1]) - 1, -1, -1):
+            if slots[j] == -1:
+                slots[j] = i
+                result[j] = jobs[i]
+                print(f"Job {jobs[i]} is scheduled in slot {j}.")
+                break
+        else:
+            print(f"Job {jobs[i]} could not be scheduled due to full slots.")
+
+    print("Job Scheduling completed.")
+
+    scheduled_jobs = [result[j] if result[j] else None for j in range(n)]
+    fig, ax = plt.subplots()
+    ax.bar(range(n), [job[2] if job else 0 for job in scheduled_jobs], color="green")
+    plt.title("Final Job Scheduling Result")
+    plt.show()
+
+    return result
+
+if __name__ == "__main__":
+    n = int(input("Enter number of jobs: "))
+    jobs = []
+    for i in range(n):
+        job_id = input(f"Enter job ID for job {i + 1}: ")
+        deadline = int(input(f"Enter deadline for job {i + 1}: "))
+        profit = int(input(f"Enter profit for job {i + 1}: "))
+        jobs.append((job_id, deadline, profit))
+    scheduled_jobs = job_scheduling(jobs)
+    print("Scheduled Jobs:")
+    for job in scheduled_jobs:
+        print(job if job else "No job scheduled")

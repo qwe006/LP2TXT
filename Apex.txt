@@ -1,0 +1,37 @@
+public class SimpleCalculator {
+
+    // Method to perform calculation
+    public static Decimal calculate(Decimal num1, Decimal num2, String operator) {
+        if (operator == '+') {
+            return num1 + num2;
+        } else if (operator == '-') {
+            return num1 - num2;
+        } else if (operator == '*') {
+            return num1 * num2;
+        } else if (operator == '/') {
+            if (num2 != 0) {
+                return num1 / num2;
+            } else {
+                System.debug('Error: Division by zero');
+                return null;
+            }
+        } else {
+            System.debug('Invalid operator');
+            return null;
+        }
+    }
+
+    // Example usage
+    public static void runExample() {
+        Decimal a = 10;
+        Decimal b = 5;
+
+        System.debug('Addition: ' + calculate(a, b, '+'));
+        System.debug('Subtraction: ' + calculate(a, b, '-'));
+        System.debug('Multiplication: ' + calculate(a, b, '*'));
+        System.debug('Division: ' + calculate(a, b, '/'));
+    }
+}
+
+use the below code only if You can open Developer Console → Execute Anonymous Window and run:
+SimpleCalculator.runExample();

@@ -1,0 +1,75 @@
+from collections import deque
+
+def dfs(graph, start):
+    visited = set()
+    stack = [start]
+    dfs_result = []
+
+    print("\n--- DFS Traversal ---")
+    print(f"Stack: {stack}")
+
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            dfs_result.append(vertex)
+            print(f"Visiting: {vertex}")
+            
+            # Push neighbors in reverse to maintain order
+            for neighbor in reversed(graph[vertex]):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+            print(f"Stack: {stack}")
+    
+    print(f"DFS: {dfs_result}")
+    return dfs_result
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    bfs_result = []
+
+    print("\n--- BFS Traversal ---")
+    print(f"Queue: {list(queue)}")
+
+    while queue:
+        vertex = queue.popleft()
+        bfs_result.append(vertex)
+        print(f"Visiting: {vertex}")
+
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+                print(f"Adding {neighbor} to the queue")
+        
+        print(f"Queue: {list(queue)}")
+
+    print(f"BFS: {bfs_result}")
+    return bfs_result
+
+def main():
+    # Take user input for graph structure
+    graph = {}
+    n = int(input("Enter the number of nodes: "))
+    
+    for _ in range(n):
+        node = input("Enter node name: ")
+        graph[node] = []
+    
+    edges = int(input("Enter the number of edges: "))
+    
+    for _ in range(edges):
+        node1, node2 = input("Enter edge (node1 node2): ").split()
+        graph[node1].append(node2)
+        graph[node2].append(node1)  # Undirected graph
+    
+    start_node = input("Enter the start node: ")
+
+    # DFS and BFS Traversals
+    dfs(graph, start_node)
+    bfs(graph, start_node)
+
+if __name__ == "__main__":
+    main()
