@@ -1,6 +1,6 @@
 import heapq
 
-# Class to represent the state of the 8-puzzle
+# Class to represent the state of the 8-puzzle abc
 class PuzzleState:
     def __init__(self, board, parent, move, depth, cost):
         self.board = board  # The puzzle board configuration
